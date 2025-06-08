@@ -10,17 +10,16 @@ using System.Windows.Forms;
 
 namespace Odev2
 {
-    // HSDButton sınıfı
-    public class HSDButton : Button
+    public class Buttons : Button
     {
         public int row { get; set; }
         public int column { get; set; }
         public int point { get; set; }
         public bool mine { get; set; }
         public bool flag { get; set; }
-        public bool revealed { get; set; } // Açılmış mı kontrolü için
+        public bool revealed { get; set; }
 
-        public HSDButton(int row, int column)
+        public Buttons(int row, int column)
         {
             this.row = row;
             this.column = column;
@@ -30,7 +29,7 @@ namespace Odev2
             this.revealed = false;
         }
 
-        public HSDButton()
+        public Buttons()
         {
             this.mine = false;
             this.flag = false;
@@ -44,14 +43,13 @@ namespace Odev2
         }
     }
 
-    // Ana Form sınıfı
     public partial class Form1 : Form
     {
         public const int GENISLIK = 10;
         public const int YUKSEKLIK = 10;
         public const int MAYIN_SAYISI = 10;
 
-        private HSDButton[,] hsDbutons = new HSDButton[YUKSEKLIK, GENISLIK];
+        private Buttons[,] butons = new Buttons[YUKSEKLIK, GENISLIK];
         private bool oyunBitti = false;
 
         public Form1()
@@ -62,20 +60,17 @@ namespace Odev2
 
         private void InitializeGame()
         {
-            // Form ayarları
             this.Size = new Size(800, 800);
-            this.Text = "HSD Mayın Tarlası";
+            this.Text = "Mayın Tarlası";
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
 
-            // TableLayoutPanel oluştur
             TableLayoutPanel tableLayout = new TableLayoutPanel();
             tableLayout.Dock = DockStyle.Fill;
             tableLayout.RowCount = YUKSEKLIK;
             tableLayout.ColumnCount = GENISLIK;
 
-            // Satır ve sütun boyutları
             for (int i = 0; i < YUKSEKLIK; i++)
             {
                 tableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100f / YUKSEKLIK));
@@ -85,48 +80,39 @@ namespace Odev2
                 tableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f / GENISLIK));
             }
 
-            // Butonları oluştur ve ekle
             for (int i = 0; i < YUKSEKLIK; i++)
             {
                 for (int j = 0; j < GENISLIK; j++)
                 {
-                    hsDbutons[i, j] = new HSDButton(i, j);
-                    hsDbutons[i, j].Dock = DockStyle.Fill;
-                    hsDbutons[i, j].Font = new Font("Arial", 12, FontStyle.Bold);
-                    hsDbutons[i, j].BackColor = Color.LightGray;
-                    hsDbutons[i, j].Text = "";
+                    butons[i, j] = new Buttons(i, j);
+                    butons[i, j].Dock = DockStyle.Fill;
+                    butons[i, j].Font = new Font("Arial", 12, FontStyle.Bold);
+                    butons[i, j].BackColor = Color.LightGray;
+                    butons[i, j].Text = "";
 
-                    // Sol tık olayı
-                    hsDbutons[i, j].Click += ButonTiklandi;
+                    butons[i, j].Click += ButonTiklandi;
+                    butons[i, j].MouseDown += ButonSagTiklandi;
 
-                    // Sağ tık olayı (bayrak için)
-                    hsDbutons[i, j].MouseDown += ButonSagTiklandi;
-
-                    tableLayout.Controls.Add(hsDbutons[i, j], j, i);
+                    tableLayout.Controls.Add(butons[i, j], j, i);
                 }
             }
 
             this.Controls.Add(tableLayout);
 
-            // Oyunu başlat
             MayinYerlestir();
             PuanlariEkle();
-            // HerSeyiGoster(); // Bu satırı kaldırdık çünkü başlangıçta gizli olmalı
         }
 
         private void ButonTiklandi(object sender, EventArgs e)
         {
             if (oyunBitti) return;
 
-            HSDButton tiklananButon = sender as HSDButton;
+            Buttons tiklananButon = sender as Buttons;
 
-            // Eğer bayrak varsa veya zaten açılmışsa işlem yapma
             if (tiklananButon.flag || tiklananButon.revealed) return;
 
-            // Butonu aç
             ButonuAc(tiklananButon);
 
-            // Oyun durumunu kontrol et
             OyunDurumuKontrol();
         }
 
@@ -134,12 +120,10 @@ namespace Odev2
         {
             if (e.Button == MouseButtons.Right && !oyunBitti)
             {
-                HSDButton tiklananButon = sender as HSDButton;
+                Buttons tiklananButon = sender as Buttons;
 
-                // Eğer buton açılmışsa bayrak koyma
                 if (tiklananButon.revealed) return;
 
-                // Bayrak koy/kaldır
                 if (tiklananButon.flag)
                 {
                     tiklananButon.flag = false;
@@ -155,7 +139,7 @@ namespace Odev2
             }
         }
 
-        private void ButonuAc(HSDButton buton)
+        private void ButonuAc(Buttons buton)
         {
             if (buton.revealed) return;
 
@@ -163,14 +147,12 @@ namespace Odev2
 
             if (buton.mine)
             {
-                // Mayına bastı - oyun bitti
                 buton.Text = "💣";
                 buton.BackColor = Color.Red;
                 OyunuBitir(false);
             }
             else
             {
-                // Güvenli alan
                 if (buton.point > 0)
                 {
                     buton.Text = buton.point.ToString();
@@ -181,7 +163,6 @@ namespace Odev2
                     buton.Text = "";
                     buton.BackColor = Color.White;
 
-                    // Eğer etrafında mayın yoksa, komşu alanları da aç
                     KomsuAlanlariAc(buton.row, buton.column);
                 }
             }
@@ -199,9 +180,9 @@ namespace Odev2
                 for (int j = baslangic_y; j <= bitis_y; j++)
                 {
                     if (i == x && j == y) continue;
-                    if (!hsDbutons[i, j].revealed && !hsDbutons[i, j].flag)
+                    if (!butons[i, j].revealed && !butons[i, j].flag)
                     {
-                        ButonuAc(hsDbutons[i, j]);
+                        ButonuAc(butons[i, j]);
                     }
                 }
             }
@@ -215,14 +196,13 @@ namespace Odev2
             {
                 for (int j = 0; j < GENISLIK; j++)
                 {
-                    if (hsDbutons[i, j].revealed && !hsDbutons[i, j].mine)
+                    if (butons[i, j].revealed && !butons[i, j].mine)
                     {
                         acikAlanSayisi++;
                     }
                 }
             }
 
-            // Tüm güvenli alanlar açıldıysa oyunu kazan
             if (acikAlanSayisi == (YUKSEKLIK * GENISLIK - MAYIN_SAYISI))
             {
                 OyunuBitir(true);
@@ -241,15 +221,15 @@ namespace Odev2
             else
             {
                 this.Text = "HSD Mayın Tarlası - KAYBETTINIZ!";
-                // Tüm mayınları göster
+
                 for (int i = 0; i < YUKSEKLIK; i++)
                 {
                     for (int j = 0; j < GENISLIK; j++)
                     {
-                        if (hsDbutons[i, j].mine && !hsDbutons[i, j].flag)
+                        if (butons[i, j].mine && !butons[i, j].flag)
                         {
-                            hsDbutons[i, j].Text = "💣";
-                            hsDbutons[i, j].BackColor = Color.Red;
+                            butons[i, j].Text = "💣";
+                            butons[i, j].BackColor = Color.Red;
                         }
                     }
                 }
@@ -269,9 +249,9 @@ namespace Odev2
                     x = rastgele.Next(0, YUKSEKLIK);
                     y = rastgele.Next(0, GENISLIK);
                 }
-                while (hsDbutons[x, y].mine);
+                while (butons[x, y].mine);
 
-                hsDbutons[x, y].mine = true;
+                butons[x, y].mine = true;
             }
         }
 
@@ -281,16 +261,16 @@ namespace Odev2
             {
                 for (int j = 0; j < GENISLIK; j++)
                 {
-                    if (!hsDbutons[i, j].mine)
+                    if (!butons[i, j].mine)
                     {
-                        int puan = CevreKontrol(hsDbutons[i, j], i, j);
-                        hsDbutons[i, j].point = puan;
+                        int puan = CevreKontrol(butons[i, j], i, j);
+                        butons[i, j].point = puan;
                     }
                 }
             }
         }
 
-        private int CevreKontrol(HSDButton merkezButon, int x, int y)
+        private int CevreKontrol(Buttons merkezButon, int x, int y)
         {
             int baslangic_x = Math.Max(x - 1, 0);
             int baslangic_y = Math.Max(y - 1, 0);
@@ -303,7 +283,7 @@ namespace Odev2
                 for (int j = baslangic_y; j <= bitis_y; j++)
                 {
                     if (i == x && j == y) continue;
-                    if (hsDbutons[i, j].mine)
+                    if (butons[i, j].mine)
                     {
                         puan++;
                     }
