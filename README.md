@@ -1,10 +1,11 @@
-# HSD Mayın Tarlası Oyunu 💣
+# Mayın Tarlası Oyunu 💣
 
 Bu proje, C# Windows Forms kullanılarak geliştirilmiş klasik Mayın Tarlası (Minesweeper) oyununun bir uygulamasıdır.
 
 ## 🎮 Oyun Hakkında
 
-Mayın Tarlası, 10x10'luk bir ızgarada gizlenmiş 10 mayını bulmaya çalıştığınız klasik bir bulmaca oyunudur. Amacınız tüm güvenli alanları açmak ve mayınlara basmamaktır.
+Mayın Tarlası, 10x10'luk bir ızgarada gizlenmiş 10 mayını bulmaya çalıştığınız klasik bir bulmaca oyunudur.
+Amacınız tüm güvenli alanları açmak ve mayınlara basmamaktır.
 
 ## 🚀 Özellikler
 
@@ -52,7 +53,7 @@ deneme/
 ## 🔧 Kurulum ve Çalıştırma
 
 1. **Gereksinimler**:
-   - Visual Studio 2019 veya üzeri
+   - Visual Studio 
    - .NET Framework 4.7.2
 
 2. **Çalıştırma**:
@@ -65,7 +66,7 @@ deneme/
 
 ## 🏗️ Kod Yapısı
 
-### HSDButton Sınıfı
+### Button Sınıfı
 Özel buton sınıfı aşağıdaki özelliklere sahiptir:
 - `row`, `column`: Butonun konumu
 - `point`: Etrafındaki mayın sayısı
@@ -89,11 +90,11 @@ deneme/
 
 ## 👨‍💻 Geliştirici
 
-**Rümeysa Altay** - [GitHub Profili](https://github.com/rmeysaaltay)
+**Rumeysa Altay** - [GitHub Profili](https://github.com/rmeysaaltay)
 
 ## 📝 Lisans
 
-Bu proje eğitim amaçlı geliştirilmiştir.
+Bu proje Nesne Tabanlı Programlama dersinde eğitim amaçlı geliştirilmiştir.
 
 ---
 
