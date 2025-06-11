@@ -19,11 +19,13 @@ Amacınız tüm güvenli alanları açmak ve mayınlara basmamaktır.
 ## 📸 Ekran Görüntüleri
 
 ### Oyun Kaybedildiğinde
-![Oyun Kaybetti](screenshot1.png)
+![Oyun Kaybetti](![Ekran görüntüsü 2025-06-09 004054](https://github.com/user-attachments/assets/dbe423d1-5d3e-4919-b3a2-dc5a3b6b3580)
+)
 *Mayına bastığınızda tüm mayınlar görünür hale gelir ve oyun biter*
 
 ### Oyun Devam Ederken
-![Oyun Devam Ediyor](screenshot2.png)
+![Oyun Devam Ediyor](![Ekran görüntüsü 2025-06-09 004150](https://github.com/user-attachments/assets/b5891fef-49cd-46c3-8115-882618e22d86)
+)
 *Güvenli alanları açarken sayılar size yardımcı olur*
 
 ## 🎯 Nasıl Oynanır?
